@@ -55,12 +55,9 @@ LLM (Claude API) + LangGraph 기반 5~50평 팝업스토어 공간의 가구 좌
 
 ## 설계 판단 강조
 
-| # | 항목 | 의미 |
-|---|---|---|
-| 1 | **파서 어댑터 패턴** | DXF / PDF / JPG / DWG 다양한 입력 → 표준 polygon 출력으로 변환. 새 형식 추가 시 어댑터 1개만. 호출자는 입력 형식 모름 |
-| 2 | **SSOT (Single Source of Truth)** | 카테고리 정의가 5곳에 흩어져 있던 것을 `categories.py` 1곳으로 통합. 신규 카테고리 추가 = 1곳만 수정. drift (불일치) 구조적 차단 |
-| 3 | **상수 중앙화** | 매직 넘버 (50 / 450 / 1500) 제거 → 이름 있는 상수로 (`vmd_constants`). 의미 명시 + 변경 시 한 곳만 |
-| 4 | **★ sub-graph 선택적 적용** | LangGraph 가 강력하나 모든 흐름에 도배하면 추상화 비용 증가. 직렬 처리로 충분한 부분 (파싱·영역 계산·가구 선별) 은 코드, **의사결정 분기 / 충돌 / 양보가 발생하는 배치 시점부터만 graph 도입**. 추상화 비용 최소화 + 자율 분기 가치 극대화 |
+**★ sub-graph 선택적 적용** — LangGraph 가 강력하나 모든 흐름에 도배하면 추상화 비용 증가. 직렬 처리로 충분한 부분 (파싱·영역 계산·가구 선별) 은 코드, **의사결정 분기 / 충돌 / 양보가 발생하는 배치 시점부터만 graph 도입**. 추상화 비용 최소화 + 자율 분기 가치 극대화.
+
+코드 위생 (파서 어댑터 패턴 / SSOT / 상수 중앙화) 은 [`nodes_small/parser*.py`](backend/python/app/nodes_small/), [`categories.py`](backend/python/app/categories.py), [`vmd_constants.py`](backend/python/app/vmd_constants.py) 파일로 직접 확인 가능.
 
 ---
 
